@@ -1,0 +1,36 @@
+2026-05-31 17:03:04 - Dolphin.config - INFO - 补全缺失的配置键: ['base_url', 'model', 'command_prefix', 'max_tokens', 'reasoning', 'skills', 'plugins', 'show_thinking']
+2026-05-31 17:03:04 - Dolphin.config - DEBUG - 保存配置文件: date\config.json
+2026-05-31 17:03:04 - Dolphin - WARNING - 工作目录不存在，回退到默认目录: workplace -> workplace
+2026-05-31 17:03:04 - Dolphin.config - DEBUG - 保存配置文件: date\config.json
+2026-05-31 17:03:04 - Dolphin - INFO - 创建工作目录: workplace
+2026-05-31 17:03:04 - Dolphin.config - DEBUG - 加载配置文件: date\config.json
+2026-05-31 17:03:04 - Dolphin.config - DEBUG - 加载配置文件: date\config.json
+2026-05-31 17:03:04 - Dolphin.mcp_manager - DEBUG - 初始化 MCPManager
+2026-05-31 17:03:04 - Dolphin.skill_manager - INFO - 技能目录不存在，创建目录: skills
+2026-05-31 17:03:04 - Dolphin.skill_manager - INFO - SkillManager 初始化完成: 0 个技能加载成功, 0 个失败
+2026-05-31 17:03:04 - Dolphin.plugin_skill_loader - INFO - PluginSkillLoader 初始化，插件目录: plugins
+2026-05-31 17:03:04 - Dolphin.plugin_skill_loader - INFO - 插件目录不存在，创建目录: plugins
+2026-05-31 17:03:04 - Dolphin.plugin_skill_loader - INFO - PluginSkillLoader 初始化完成: 0 个插件技能加载成功, 0 个失败
+2026-05-31 17:03:04 - Dolphin.request_manager - INFO - RequestManager 初始化完成
+2026-05-31 17:03:04 - Dolphin.backup_manager - INFO - BackupManager 初始化完成
+2026-05-31 17:03:04 - Dolphin.chat - INFO - 生成对话ID: 648a0bbf-5fcc-41d1-ade2-44e95fce35bf
+2026-05-31 17:03:04 - Dolphin.backup_manager - INFO - 当前对话ID已设置: 648a0bbf-5fcc-41d1-ade2-44e95fce35bf
+2026-05-31 17:03:04 - Dolphin.config - DEBUG - 加载配置文件: date\config.json
+2026-05-31 17:03:04 - Dolphin.config - DEBUG - 加载配置文件: date\config.json
+2026-05-31 17:03:04 - Dolphin.chat - DEBUG - 更新工具列表: 共 0 个工具
+2026-05-31 17:03:04 - Dolphin.config - DEBUG - 加载配置文件: date\config.json
+2026-05-31 17:03:04 - Dolphin.chat - INFO - 初始化 QuickAIChat: model=deepseek-v4-flash, temperature=0.7, max_tokens=8192, enable_tools=True
+2026-05-31 17:03:05 - Dolphin - INFO - Dolphin 启动
+2026-05-31 17:03:05 - Dolphin - INFO - 当前配置: model=deepseek-v4-flash, max_tokens=8192, conversation=main, work_directory=workplace
+2026-05-31 17:03:05 - Dolphin.config - DEBUG - 保存配置文件: date\config.json
+2026-05-31 17:03:05 - Dolphin - INFO - 工作目录已更改: workplace -> workplace
+2026-05-31 17:03:05 - Dolphin.dpc_manager - INFO - .dpc 初始化: dir_id=d159e08b-4169-4d73-b16e-c714242b8dad
+2026-05-31 17:03:05 - Dolphin.dpc_manager - INFO - 迁移旧 .dpc 格式: 0 个对话
+2026-05-31 17:03:05 - Dolphin.chat - INFO - 工作目录已重置为: workplace
+2026-05-31 17:03:05 - Dolphin.dpc_manager - INFO - 迁移旧 .dpc 格式: 0 个对话
+2026-05-31 17:03:05 - Dolphin.dpc_manager - INFO - 迁移旧 .dpc 格式: 0 个对话
+2026-05-31 17:03:05 - Dolphin.dpc_manager - INFO - 迁移旧 .dpc 格式: 0 个对话
+2026-05-31 17:03:05 - Dolphin.dpc_manager - INFO - .dpc: 新增对话 'workplace' -> b9e2236a-a9da-4016-a5ec-c228469d916e
+2026-05-31 17:03:05 - Dolphin.conversation - INFO - 保存对话: dir=d159e08b-4169-4d73-b16e-c714242b8dad, conv=b9e2236a-a9da-4016-a5ec-c228469d916e, 消息数: 0
+2026-05-31 17:03:05 - Dolphin.conversation - INFO - 初始化新对话: workplace (b9e2236a-a9da-4016-a5ec-c228469d916e)
+2026-05-31 17:03:05 - Dolphin - INFO - 为工作目录创建新对话: workplace (b9e2236a-a9da-4016-a5ec-c228469d916e)

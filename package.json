@@ -1,0 +1,52 @@
+{
+  "name": "pixelboard",
+  "version": "1.0.0",
+  "description": "像素画编辑器 | A pixel art editor for Minecraft texture creation",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "electron .",
+    "dev:electron": "vite build && electron .",
+    "pack": "vite build && electron-builder --dir",
+    "dist": "vite build && electron-builder"
+  },
+  "keywords": [],
+  "author": "Minomiao",
+  "license": "ISC",
+  "type": "commonjs",
+  "build": {
+    "appId": "com.minomiao.pixelboard",
+    "productName": "PixelBoard",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": null
+    }
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "electron": "^42.1.0",
+    "electron-builder": "^26.8.1",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "vue": "^3.5.17"
+  }
+}
