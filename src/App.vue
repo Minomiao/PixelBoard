@@ -124,6 +124,7 @@
                   <option value="jpg">JPEG</option>
                   <option value="webp">WebP</option>
                   <option value="bmp">BMP</option>
+                  <option value="ico">ICO</option>
                 </select>
               </div>
               <div class="settings-group" :class="{ 'settings-group-disabled': supportsTransparency }">

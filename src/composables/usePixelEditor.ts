@@ -165,8 +165,11 @@ export function usePixelEditor() {
 
     for (let y = 0; y < canvasHeight.value; y++) {
       for (let x = 0; x < canvasWidth.value; x++) {
-        const isEvenCell = (x + y) % 2 === 0
-        ctx.fillStyle = isEvenCell ? 'rgba(255,255,255,0.85)' : 'rgba(200,200,200,0.85)'
+        if (backgroundImage.value) {
+          ctx.fillStyle = (x + y) % 2 === 0 ? 'rgba(128,128,128,0.25)' : 'rgba(96,96,96,0.25)'
+        } else {
+          ctx.fillStyle = (x + y) % 2 === 0 ? '#ffffff' : '#d0d0d0'
+        }
         ctx.fillRect(x * z, y * z, z, z)
       }
     }
@@ -354,12 +357,122 @@ export function usePixelEditor() {
     }, 2000)
   }
 
+  function hexToRgb(hex: string): [number, number, number] {
+    const r = parseInt(hex.slice(1, 3), 16)
+    const g = parseInt(hex.slice(3, 5), 16)
+    const b = parseInt(hex.slice(5, 7), 16)
+    return [r, g, b]
+  }
+
+  function encodeICO(w: number, h: number, scale: number, bgColor: string): Uint8Array {
+    const imgW = w * scale
+    const imgH = h * scale
+    const hasTransparency = true
+
+    // DIB header (40 bytes) + XOR pixels (BGRA) + AND mask (1bpp, row-aligned to 4 bytes)
+    const xorRowBytes = imgW * 4
+    const xorSize = xorRowBytes * imgH
+
+    const andRowBytes = Math.ceil(imgW / 8)
+    const andPad = (4 - (andRowBytes % 4)) % 4
+    const andStride = andRowBytes + andPad
+    const andSize = andStride * imgH
+
+    const dibSize = 40
+    const imageDataOffset = 6 + 16 // header + 1 entry
+    const imageSize = dibSize + xorSize + andSize
+    const fileSize = imageDataOffset + imageSize
+
+    const buf = new ArrayBuffer(fileSize)
+    const dv = new DataView(buf)
+    let pos = 0
+
+    // ICO header
+    dv.setUint16(pos, 0, true); pos += 2      // reserved
+    dv.setUint16(pos, 1, true); pos += 2      // type: ICO
+    dv.setUint16(pos, 1, true); pos += 2      // count: 1
+
+    // Directory entry
+    dv.setUint8(pos, imgW >= 256 ? 0 : imgW); pos += 1   // width
+    dv.setUint8(pos, imgH >= 256 ? 0 : imgH); pos += 1   // height
+    dv.setUint8(pos, 0); pos += 1                         // color count
+    dv.setUint8(pos, 0); pos += 1                         // reserved
+    dv.setUint16(pos, 1, true); pos += 2                  // planes
+    dv.setUint16(pos, 32, true); pos += 2                 // bpp
+    dv.setUint32(pos, imageSize, true); pos += 4          // image size
+    dv.setUint32(pos, imageDataOffset, true); pos += 4    // offset
+
+    // DIB header (BITMAPINFOHEADER)
+    const headerPos = pos
+    dv.setUint32(pos, 40, true); pos += 4                 // header size
+    dv.setInt32(pos, imgW, true); pos += 4                // width
+    dv.setInt32(pos, imgH * 2, true); pos += 4            // height (XOR + AND)
+    dv.setUint16(pos, 1, true); pos += 2                  // planes
+    dv.setUint16(pos, 32, true); pos += 2                 // bpp
+    dv.setUint32(pos, 0, true); pos += 4                  // compression: BI_RGB
+    dv.setUint32(pos, xorSize + andSize, true); pos += 4  // image size
+    dv.setInt32(pos, 0, true); pos += 4                   // xPelsPerMeter
+    dv.setInt32(pos, 0, true); pos += 4                   // yPelsPerMeter
+    dv.setUint32(pos, 0, true); pos += 4                  // colors used
+    dv.setUint32(pos, 0, true); pos += 4                  // colors important
+
+    // XOR pixels (BGRA, bottom-up)
+    const xorOffset = pos
+    const [bgR, bgG, bgB] = hexToRgb(bgColor)
+    for (let y = imgH - 1; y >= 0; y--) {
+      const rowStart = xorOffset + (imgH - 1 - y) * xorRowBytes
+      for (let x = 0; x < imgW; x++) {
+        const px = Math.floor(x / scale)
+        const py = Math.floor(y / scale)
+        const color = pixelData.value[py]?.[px]
+        const off = rowStart + x * 4
+        if (color !== null && color !== undefined) {
+          const [r, g, b] = hexToRgb(color)
+          dv.setUint8(off, b)
+          dv.setUint8(off + 1, g)
+          dv.setUint8(off + 2, r)
+          dv.setUint8(off + 3, 255)
+        } else {
+          dv.setUint8(off, bgB)
+          dv.setUint8(off + 1, bgG)
+          dv.setUint8(off + 2, bgR)
+          dv.setUint8(off + 3, 0)
+        }
+      }
+    }
+    pos = xorOffset + xorSize
+
+    // AND mask (1bpp, bottom-up, all zeros for 32bpp)
+    for (let y = 0; y < imgH; y++) {
+      for (let b = 0; b < andStride; b++) {
+        dv.setUint8(pos, 0)
+        pos++
+      }
+    }
+
+    return new Uint8Array(buf)
+  }
+
   function exportImage(): void {
     const w = canvasWidth.value
     const h = canvasHeight.value
     const scale = exportScale.value
     const format = exportFormat.value
     const bgColor = exportBgColor.value
+
+    if (format === 'ico') {
+      const icoData = encodeICO(w, h, scale, bgColor)
+      const blob = new Blob([icoData], { type: 'image/x-icon' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.download = `pixelboard-${w}x${h}.ico`
+      link.href = url
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+      return
+    }
 
     const exportCanvas = document.createElement('canvas')
     exportCanvas.width = w * scale
