@@ -1,6 +1,6 @@
 {
   "name": "pixelboard",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "像素画编辑器 | A pixel art editor for Minecraft texture creation",
   "main": "main.js",
   "scripts": {
@@ -27,6 +27,7 @@
       "package.json"
     ],
     "win": {
+      "icon": "icon.ico",
       "signAndEditExecutable": false,
       "target": [
         {
@@ -38,7 +39,7 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "installerIcon": null
+      "installerIcon": "icon.ico"
     }
   },
   "devDependencies": {
