@@ -36,11 +36,10 @@
 
     .top-bar {
       background: var(--secondary-bg);
-      padding: 10px 15px;
+      padding: 6px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border-color);
       -webkit-app-region: drag;
       user-select: none;
     }
@@ -134,7 +133,7 @@
     }
 
     .top-btn {
-      background: var(--accent);
+      background: transparent;
       color: white;
       border: none;
       padding: 6px 14px;
@@ -153,11 +152,23 @@
     }
 
     .top-btn:hover {
-      background: var(--tool-hover);
+      background: rgba(255, 255, 255, 0.08);
     }
 
     .top-btn.active {
-      background: var(--highlight);
+      background: transparent;
+    }
+
+    .settings-btn:hover {
+      background: transparent;
+    }
+
+    .settings-btn:hover svg {
+      transform: rotate(45deg);
+    }
+
+    .settings-btn svg {
+      transition: transform 0.3s ease;
     }
 
     .dropdown {
@@ -347,7 +358,8 @@
       border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 0;
-      width: 640px;
+      width: 83.33vw;
+      height: 83.33vh;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       animation: modalSlideIn 0.2s ease;
       display: flex;
@@ -390,7 +402,8 @@
 
     .settings-modal-body {
       display: flex;
-      min-height: 320px;
+      flex: 1;
+      overflow: hidden;
     }
 
     .settings-sidebar {
@@ -403,6 +416,7 @@
       gap: 4px;
       border-right: 1px solid var(--border-color);
       border-radius: 0 0 0 8px;
+      overflow-y: auto;
     }
 
     .settings-menu-item:first-child {
@@ -442,6 +456,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+      overflow-y: auto;
     }
 
     .settings-content-header {
@@ -509,13 +524,12 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      border-right: 2px solid var(--border-color);
     }
 
     .tool-btn {
       width: 60px;
       height: 60px;
-      background: var(--tool-bg);
+      background: transparent;
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -527,13 +541,11 @@
     }
 
     .tool-btn:hover {
-      background: var(--tool-hover);
       transform: scale(1.05);
     }
 
     .tool-btn.active {
       box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
-      background: var(--highlight);
     }
 
     .tool-btn svg {
@@ -573,7 +585,6 @@
       display: flex;
       flex-direction: column;
       gap: 15px;
-      border-left: 2px solid var(--border-color);
       overflow: hidden;
     }
 
