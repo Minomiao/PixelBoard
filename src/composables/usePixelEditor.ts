@@ -99,6 +99,16 @@ export function usePixelEditor() {
   const backgroundImage: Ref<HTMLImageElement | null> = ref(null)
   const hasBackground: ComputedRef<boolean> = computed(() => backgroundImage.value !== null)
 
+  const cursorStyle: ComputedRef<string> = computed(() => {
+    const map: Record<string, string> = {
+      pencil: 'crosshair',
+      eraser: 'cell',
+      fill: 'crosshair',
+      picker: 'crosshair'
+    }
+    return map[currentTool.value] ?? 'crosshair'
+  })
+
   const presetColors = PRESET_COLORS
   const frequentColors = FREQUENT_COLORS
   const recentColors: Ref<string[]> = ref([])
@@ -278,15 +288,45 @@ export function usePixelEditor() {
     return { x, y }
   }
 
+  function sampleBackgroundColor(px: number, py: number): string | null {
+    const bg = backgroundImage.value
+    if (!bg) return null
+    const canvas = canvasRef.value
+    if (!canvas) return null
+
+    // 背景图在 doRender 中被拉伸绘制到整个画布 (0,0 -> canvas.width, canvas.height)
+    // 需要将像素坐标正确映射到背景图原始坐标系
+    const z = actualZoom.value
+    const centerX = px * z + z / 2
+    const centerY = py * z + z / 2
+    const bgX = (centerX / canvas.width) * bg.naturalWidth
+    const bgY = (centerY / canvas.height) * bg.naturalHeight
+
+    const tmpCanvas = document.createElement('canvas')
+    tmpCanvas.width = 1
+    tmpCanvas.height = 1
+    const tmpCtx = tmpCanvas.getContext('2d')!
+    tmpCtx.drawImage(bg, bgX, bgY, 1, 1, 0, 0, 1, 1)
+    const data = tmpCtx.getImageData(0, 0, 1, 1).data
+    return '#' + [data[0], data[1], data[2]].map(v => v.toString(16).padStart(2, '0')).join('')
+  }
+
   function onCanvasMouseDown(e: MouseEvent): void {
     isDrawing.value = true
     const pos = getPixelPosition(e)
     if (pos.x >= 0 && pos.x < canvasWidth.value && pos.y >= 0 && pos.y < canvasHeight.value) {
       if (currentTool.value === 'picker') {
         const picked = pixelData.value[pos.y][pos.x]
-        if (picked !== null) selectColor(picked)
+        if (picked !== null) {
+          selectColor(picked)
+        } else {
+          const bgColor = sampleBackgroundColor(pos.x, pos.y)
+          if (bgColor) selectColor(bgColor)
+        }
       } else if (currentTool.value === 'fill') {
         floodFill(pos.x, pos.y)
+      } else if (currentTool.value === 'eraser') {
+        erasePixel(pos.x, pos.y)
       } else {
         drawPixel(pos.x, pos.y)
       }
@@ -611,6 +651,7 @@ export function usePixelEditor() {
     exportScale,
     backgroundImage,
     hasBackground,
+    cursorStyle,
     presetColors,
     frequentColors,
     recentColors,

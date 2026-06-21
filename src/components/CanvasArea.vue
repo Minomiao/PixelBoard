@@ -4,6 +4,7 @@
       <canvas
         id="pixelCanvas"
         ref="canvasRef"
+        :style="{ cursor: cursorStyle }"
         @mousedown="$emit('mousedown', $event)"
         @mousemove="$emit('mousemove', $event)"
         @mouseup="$emit('mouseup')"
@@ -15,10 +16,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 const canvasRef = ref(null)
 const canvasAreaRef = ref(null)
+
+defineProps({
+  cursorStyle: {
+    type: String,
+    default: 'crosshair'
+  }
+})
 
 defineEmits(['mousedown', 'mousemove', 'mouseup'])
 

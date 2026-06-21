@@ -9,12 +9,6 @@
         ></div>
         <span class="current-color-hex">{{ currentColorUpper }}</span>
       </div>
-      <input
-        type="color"
-        id="colorPicker"
-        :value="currentColor"
-        @input="$emit('update:currentColor', $event.target.value)"
-      >
     </div>
 
     <div class="color-section color-section-frequent">
@@ -62,7 +56,7 @@ const props = defineProps({
   recentColors: Array
 })
 
-defineEmits(['update:currentColor', 'selectColor'])
+defineEmits(['selectColor'])
 
 const mergedFrequentColors = computed(() => {
   const merged = [...props.recentColors]

@@ -32,6 +32,7 @@
       <div class="content-area">
         <CanvasArea
           ref="canvasAreaComp"
+          :cursor-style="cursorStyle"
           @mousedown="onCanvasMouseDown"
           @mousemove="onCanvasMouseMove"
           @mouseup="onCanvasMouseUp"
@@ -44,7 +45,6 @@
           :preset-colors="presetColors"
           :frequent-colors="frequentColors"
           :recent-colors="recentColors"
-          @update:current-color="currentColor = $event"
           @select-color="selectColor"
         />
       </div>
@@ -230,6 +230,7 @@ const {
   applySettings,
   clearCanvas,
   hasBackground,
+  cursorStyle,
   loadBackgroundImage,
   clearBackground,
   exportImage,
