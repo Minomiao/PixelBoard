@@ -1,6 +1,6 @@
 {
   "name": "pixelboard",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "像素画编辑器 | A pixel art editor for Minecraft texture creation",
   "main": "main.js",
   "scripts": {
